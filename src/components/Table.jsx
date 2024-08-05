@@ -1,7 +1,42 @@
 import React from "react";
+import { useSelector } from "react-redux";
+import { useEffect, useState } from "react";
+import mockData from "../assets/data";
 
-const Table = ({mockData}) => {
-    
+const Table = ({ propsData }) => {
+  let { column, value, operator } = propsData;
+  value = parseInt(value);
+  const [ans, setAns] = useState([]);
+
+  useEffect(() => {
+    console.log("useeffectcolumn", column, value, operator);
+    const fetchData = () => {
+      let ans2 = [];
+      if (column === "id" || column === "age" || column === "salary") {
+        ans2 = mockData.filter((element) => {
+          if (operator === "Equals") {
+            return element[column] === value;
+          } else if (operator === "Less than") {
+            return element[column] < value;
+          } else if (operator === "Less than or equal") {
+            return element[column] <= value;
+          } else if (operator === "Greater than") {
+            return element[column] > value;
+          } else if (operator === "Greater than or equal") {
+            return element[column] >= value;
+          } else if (operator === "Range") {
+            const temp = value.split(",");
+            return element[column] >= temp[0] && element[column] <= temp[1];
+          } else if (operator === "Not equal") {
+            return element[column] != value;
+          }
+        });
+      }
+      setAns(ans2);
+    };
+    fetchData();
+  }, []);
+
   return (
     <>
       <h2>A basic HTML table</h2>
@@ -19,9 +54,9 @@ const Table = ({mockData}) => {
           <th>lastLogin</th>
           <th>accessLevel</th>
         </tr>
-        {mockData.map((element) => {
+        {ans?.map((element) => {
           return (
-            <tr key={element.id} >
+            <tr key={element.id}>
               <th>{element.id}</th>
               <th>{element.name}</th>
               <th>{element.age}</th>
@@ -37,9 +72,6 @@ const Table = ({mockData}) => {
           );
         })}
       </table>
-      <p>
-        To understand the example better, we have added borders to the table.
-      </p>
     </>
   );
 };
