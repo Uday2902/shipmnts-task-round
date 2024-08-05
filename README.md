@@ -11,3 +11,6 @@ Currently, two official plugins are available:
 
 
 # Clone the repo and run command -> npm install then run the command -> npm run dev
+
+Due to time constraints Functionality will work only for fields : 
+id, salary and age and you will also need to refresh after each submit
